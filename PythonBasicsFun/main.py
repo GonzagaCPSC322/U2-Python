@@ -1,4 +1,5 @@
 import csv
+import copy
 
 import hello_world
 
@@ -51,8 +52,16 @@ fibs.append(8)
 print(fibs)
 
 # 2D lists (AKA nested list)
+def pretty_print(table):
+    for row in table:
+        for value in row:
+            print(value, end=" ")
+        print()
+    print()
+
 matrix = [[0, 1, 2], [3, 4, 5]]
 print(matrix[0], matrix[0][1])
+pretty_print(matrix)
 
 # FILE IO
 # often we want to open a file and read its contents into memory
@@ -84,5 +93,82 @@ def load_table(filename):
     infile.close()
     return table
 
+def write_table(table, filename):
+    outfile = open(filename, "w")
+    writer = csv.writer(outfile)
+    writer.writerows(table)
+    outfile.close()
+
 table = load_table("data.csv")
 print(table)
+write_table(table, "data_copy.csv")
+
+# ASSERTS
+# assert statements "assert" that something is true
+# if the statement evalues to true, then execution continues
+# if the statement evaluates to false, the execution stops (crashes)
+assert 3 == 3
+print("after assert")
+
+# use assert statements to write unit tests
+# a unit test is a function that tests another function for functional correctness
+# a unit test is comprised of one or more test cases
+# the test cases should cover common/simple input/output pairs (e.g. happy path)
+# plus rare/complex input/output pairs (e.g. edge cases)
+# the order of assert statement operands
+# actual (what code produced) vs expected (solution)
+# ex: remove_missing_values(...) == [[], ...]
+
+# PYTHON IS PASS BY OBJECT REFERENCE
+# this means that object references are passed by value (copied)
+# for more details: https://robertheaton.com/2014/02/09/pythons-pass-by-object-reference-as-explained-by-philip-k-dick/
+
+# TASK: define/call a function add_one(table) that accepts a reference
+# to a 2D list of numbers and adds 1 to every single element
+def add_one(table):
+    for i in range(len(table)):
+        for j in range(len(table[i])):
+            table[i][j] += 1
+
+def clear_out(table):
+    table = []
+
+print("matrix before:", matrix)
+add_one(matrix)
+print("matrix after:", matrix)
+
+print("matrix before:", matrix)
+clear_out(matrix)
+print("matrix after:", matrix)
+
+# COPIES
+# shallow copy: copies the references, not the objects
+matrix_copy = matrix.copy()
+print("matrix before:", matrix)
+print("matrix_copy before:", matrix_copy)
+add_one(matrix)
+print("matrix after:", matrix)
+print("matrix_copy after:", matrix_copy)
+# deep copy: copies the objects themselves
+matrix_deep_copy = copy.deepcopy(matrix)
+print("matrix before:", matrix)
+print("matrix_copy before:", matrix_copy)
+print("matrix_deep_copy before:", matrix_deep_copy)
+add_one(matrix)
+print("matrix after:", matrix)
+print("matrix_copy after:", matrix_copy)
+print("matrix_deep_copy after:", matrix_deep_copy)
+
+# CLASSES
+# class: a collection of state and behavior that completely describes something
+# object: an instance of a class
+class Subject:
+    """Represents a human subject in a research study.
+
+    Attributes:
+        sid(int): a unique subject id
+        name(str): the subject's name
+        measurements(dict of string:float): timestamp:value recordings
+            for this subject's measurements in the study
+    
+    """
