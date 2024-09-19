@@ -171,4 +171,49 @@ class Subject:
         measurements(dict of string:float): timestamp:value recordings
             for this subject's measurements in the study
     
+        num_subjects(int): a class-level attribute that stores the total number 
+            of subjects in the study
     """
+    # declare your class-level attributes here
+    num_subjects = 0
+    # there is one num_subjects variable shared amongst all Subject objects
+    # do not declare instance-level attributes here!!
+
+    # special method __init__(self)
+    # like a constructor
+    def __init__(self, name, measurements=None):
+        # self is like the "this" reference
+        # self refers to the "current" AKA "invoking" object
+        self.sid = Subject.num_subjects
+        Subject.num_subjects += 1
+        self.name = name
+        if measurements is None:
+            measurements = {}
+        self.measurements = measurements
+
+    # special method __str__(self)
+    # return a string rep of an object (whenever it is needed)
+    def __str__(self):
+        return f"SID: {self.sid} NAME: {self.name} MEASUREMENTS: {self.measurements}"
+    
+    # lets write our instance-level method
+    def record_measurement(self, timestamp, value):
+        # should do error checking!!
+        self.measurements[timestamp] = value
+
+    # lets write a class-level method
+    def display_study_info():
+        print(f"{Subject.num_subjects} subjects are in this study.")
+    
+# now we can make some Subject objects!
+sub1 = Subject("spike")
+print(sub1)
+print(sub1.__str__())
+print(sub1.name)
+sub1.record_measurement("9/12/23 8:33:00", 23.1)
+print(sub1)
+print(Subject.num_subjects)
+sub2 = Subject("otto")
+print(Subject.num_subjects)
+print(sub2)
+Subject.display_study_info()
